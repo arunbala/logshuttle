@@ -37,7 +37,6 @@ class GCloudBatchedLogHandler(logging.Handler):
         self.send_interval_in_ms = send_interval_in_ms
         self.batch_length = batch_length
         self.log_name = log_name
-        self.gcloud_logclient = glogging.Client()
         self.logger = logging.getLogger("GCloudBatchedLogHandler")
         
         # dictionaries to store the queues used as buffers and events used as signals for each log_name
@@ -61,6 +60,7 @@ class GCloudBatchedLogHandler(logging.Handler):
                     break
             
             if len(log_records) > 0:
+                gcloud_logger = glogging.Client().logger(log_name)
                 self.logger.debug("Collected {} log records".format(len(log_records)))
                 batch = gcloud_logger.batch()
 
@@ -82,7 +82,7 @@ class GCloudBatchedLogHandler(logging.Handler):
         if not log_name in self.queues:
             self.queues[log_name] = Queue(0)
             self.events[log_name] = Event()
-            t = Thread(target=self._send_batch, args=(log_name, self.queues[log_name], self.send_interval_in_ms, self.gcloud_logclient.logger(log_name), self.events[log_name]))
+            t = Thread(target=self._send_batch, args=(log_name, self.queues[log_name], self.send_interval_in_ms, self.events[log_name]))
             t.daemon = True
             t.start()
         
