@@ -43,7 +43,7 @@ class GCloudBatchedLogHandler(logging.Handler):
         self.queues = {}
         self.events = {}
 
-    def _send_batch(self, log_name, queue, send_interval_in_ms, gcloud_logger, event):
+    def _send_batch(self, log_name, queue, send_interval_in_ms, event):
         """
             Method used by the threads. Keeps looping until the process is killed.
             In each loop, it sends all existing log records and waits for the timeout

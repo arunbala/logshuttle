@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="logshuttle",
-    version="0.2.0",
+    version="0.2.2",
     url="https://github.com/arunbala/logshuttle/",
     license=open("LICENSE").read(),
     author="Arun Bala",
